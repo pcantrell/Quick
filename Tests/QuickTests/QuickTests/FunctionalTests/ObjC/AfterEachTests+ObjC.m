@@ -26,7 +26,7 @@ it(@"executes the outer afterEach closures once, but not before this closure [1]
 });
 
 it(@"executes the outer afterEach closures a second time, but not before this closure [2]", ^{
-    expect(afterEachOrder).to(equal(@[@(OuterOne), @(OuterTwo), @(OuterThree)]));
+    expect(afterEachOrder).to(equal(@[@(OuterThree), @(OuterTwo), @(OuterOne)]));
 });
 
 context(@"when there are nested afterEach", ^{
@@ -37,8 +37,8 @@ context(@"when there are nested afterEach", ^{
         // The afterEach for the previous two examples should have been run.
         // The list should contain the afterEach for those example, executed from top to bottom.
         expect(afterEachOrder).to(equal(@[
-            @(OuterOne), @(OuterTwo), @(OuterThree),
-            @(OuterOne), @(OuterTwo), @(OuterThree),
+            @(OuterThree), @(OuterTwo), @(OuterOne),
+            @(OuterThree), @(OuterTwo), @(OuterOne),
         ]));
     });
 });
@@ -67,12 +67,12 @@ QuickSpecEnd
     qck_runSpec([FunctionalTests_AfterEachSpec_ObjC class]);
     NSArray *expectedOrder = @[
         // [1] The outer afterEach closures are executed from top to bottom.
-        @(OuterOne), @(OuterTwo), @(OuterThree),
+        @(OuterThree), @(OuterTwo), @(OuterOne),
         // [2] The outer afterEach closures are executed from top to bottom.
-        @(OuterOne), @(OuterTwo), @(OuterThree),
+        @(OuterThree), @(OuterTwo), @(OuterOne),
         // [3] The outer afterEach closures are executed from top to bottom,
         //     then the outer afterEach closures are executed from top to bottom.
-        @(InnerOne), @(InnerTwo), @(OuterOne), @(OuterTwo), @(OuterThree),
+        @(InnerTwo), @(InnerOne), @(OuterThree), @(OuterTwo), @(OuterOne),
     ];
 
     XCTAssertEqualObjects(afterEachOrder, expectedOrder);

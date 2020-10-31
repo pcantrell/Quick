@@ -29,7 +29,7 @@ class FunctionalTests_AfterEachSpec: QuickSpec {
             it("executes the outer afterEach closures a second time, but not before this closure [2]") {
                 // The afterEach for the previous example should have been run.
                 // The list should contain the afterEach for that example, executed from top to bottom.
-                expect(afterEachOrder).to(equal([.outerOne, .outerTwo, .outerThree]))
+                expect(afterEachOrder).to(equal([.outerThree, .outerTwo, .outerOne]))
             }
 
             context("when there are nested afterEach") {
@@ -40,8 +40,8 @@ class FunctionalTests_AfterEachSpec: QuickSpec {
                     // The afterEach for the previous two examples should have been run.
                     // The list should contain the afterEach for those example, executed from top to bottom.
                     expect(afterEachOrder).to(equal([
-                        .outerOne, .outerTwo, .outerThree,
-                        .outerOne, .outerTwo, .outerThree,
+                        .outerThree, .outerTwo, .outerOne,
+                        .outerThree, .outerTwo, .outerOne,
                     ]))
                 }
             }
@@ -78,12 +78,12 @@ final class AfterEachTests: XCTestCase, XCTestCaseProvider {
         qck_runSpec(FunctionalTests_AfterEachSpec.self)
         let expectedOrder: [AfterEachType] = [
             // [1] The outer afterEach closures are executed from top to bottom.
-            .outerOne, .outerTwo, .outerThree,
+            .outerThree, .outerTwo, .outerOne,
             // [2] The outer afterEach closures are executed from top to bottom.
-            .outerOne, .outerTwo, .outerThree,
+            .outerThree, .outerTwo, .outerOne,
             // [3] The inner afterEach closures are executed from top to bottom,
             //     then the outer afterEach closures are executed from top to bottom.
-            .innerOne, .innerTwo, .outerOne, .outerTwo, .outerThree,
+            .innerTwo, .innerOne, .outerThree, .outerTwo, .outerOne,  
         ]
         XCTAssertEqual(afterEachOrder, expectedOrder)
 

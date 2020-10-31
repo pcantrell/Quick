@@ -93,21 +93,32 @@ final class AroundEachTests: XCTestCase, XCTestCaseProvider {
         qck_runSpec(FunctionalTests_AroundEachSpec.self)
         let expectedOrder: [AroundEachType] = [
             // First spec [1]
-            .before0, .around0Prefix,  // All beforeEaches and aroundEach prefixes happen in order...
-            .before1, .around1Prefix,
-            .before2,
-            .around1Suffix,            // ...then aroundEaches suffixes resolve in order...
-            .around0Suffix,
-            .after0, .after1, .after2, // ...then afterEaches all come last.
+            .before0,          // All beforeEaches and aroundEach prefixes happen in order...
+             .around0Prefix,
+              .before1,
+               .around1Prefix,
+                .before2,
+                .after2,
+               .around1Suffix, // ...then aroundEach and afterEach resolve in the opposite order,
+              .after1,         //    balancing the calls above
+             .around0Suffix,
+            .after0,
 
-            .before0, .around0Prefix,          // Outer setup happens first...
-            .before1, .around1Prefix,
-            .before2,
-            .innerBefore, .innerAroundPrefix,  // ...then inner setup...
-            .innerAroundSuffix, .innerAfter,   // ...then inner cleanup, happily inner after...
-            .around1Suffix,                    // ...then the outer cleanup, as before.
-            .around0Suffix,
-            .after0, .after1, .after2
+            // Second spec [2]
+            .before0,
+             .around0Prefix,          // Outer setup happens first...
+              .before1,
+               .around1Prefix,
+                .before2,
+                 .innerBefore,
+                  .innerAroundPrefix, // ...then inner setup...
+                  .innerAroundSuffix,
+                 .innerAfter,         // ...then happily inner after...
+                .after2,              // ...then the outer cleanup, as before.
+               .around1Suffix,
+              .after1,
+             .around0Suffix,
+            .after0,
         ]
         XCTAssertEqual(aroundEachOrder, expectedOrder)
 
